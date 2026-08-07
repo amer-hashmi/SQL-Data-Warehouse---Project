@@ -1,0 +1,93 @@
+/*
+==================================================================================================
+Quyality Checks
+==================================================================================================
+Script Purpose:
+  This script perform variou quality checks for data consistency, accuracy, and standadisation
+  across the silver schema,. It includes checks for:
+    - Null or duplicate Primary key
+    - Unwanted spaces in string fiels.
+    - Data standardisation and consistency
+    - Invalid data ranges and orders.
+    - Data consistency b/w related fields.
+
+Usage Notes:
+  - Run these checks after data loading Silver Layer.
+  - Investigate the resolve and disrepancies found during the checks.
+==================================================================================================
+
+
+-- null or duplicate inside cust_if
+select 
+cust_id,
+count(*)
+from bronze.crm_cust_info
+
+group by cust_id
+having count(*) >1 or cust_id is null
+
+-- solution for the repeated id using the creation time of the newest one not old
+select* from(
+select *,
+row_number () over (partition by cust_id order by cst_date desc) as flag
+from bronze.crm_cust_info
+	where cust_id is not null
+)t where flag =1
+
+
+-- check for unwanted spaces
+select 
+prd_nm
+from silver.crm_prd_info
+where prd_nm != trim(prd_nm)
+
+-- Data Standardization & Consistency
+
+select distinct prd_line
+from silver.crm_prd_info
+-- check for null or negative number
+select
+prd_cost
+from silver.crm_prd_info
+where prd_cost <0 or prd_cost is null
+
+-- check for invalid order Date
+
+select
+prd_key,
+prd_start_dt,
+prd_end_dt,
+lead(prd_start_dt)over (partition by prd_key order by prd_start_dt)-1 as prd_date_ts
+from bronze.crm_prd_info
+where prd_key in ('AC-BC-BC-M005', 'AC-HE-HL-U509-B')
+
+-- check for invalid dates
+select
+nullif  (sls_ship_dt,0) as sls_ship_dt
+from bronze.crm_sales_details
+where sls_ship_dt <=0 or len(sls_ship_dt) != 8
+-- CHECK DATA CONSISTENCY: b/w Sales, Quantity & Price
+-- Sales = Quantity * Price, Values mut not be zero, negative, or null 
+select distinct
+sls_sales ,
+sls_quantity,
+ sls_price 
+
+from silver.crm_sales_details
+where sls_sales != sls_quantity * sls_price
+or sls_sales <=0 or sls_price <=0 or sls_quantity <=0
+or sls_sales is null or sls_price is null or sls_quantity is null
+order by sls_sales, sls_quantity,sls_price
+
+
+select* from bronze.crm_sales_details
+where sls_order_dt > sls_ship_dt or sls_order_dt > sls_due_dt
+
+
+
+
+-- identify out of rang dates
+select distinct
+BDATE
+from bronze.erp_cust_az12
+where BDATE < '1924-01-01' or BDATE < GETDATE()
