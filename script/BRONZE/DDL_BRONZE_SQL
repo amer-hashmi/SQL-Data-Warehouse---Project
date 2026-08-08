@@ -61,7 +61,7 @@ create table bronze.erp_loc_a101(
 
 go
 create table bronze.erp_px_cat_g1v2(
-	ID int,
+	ID nvarchar(50),
 	CAT nvarchar(50),
 	SUBCAT nvarchar(50),
 	MAINTENANCE nvarchar(50)
