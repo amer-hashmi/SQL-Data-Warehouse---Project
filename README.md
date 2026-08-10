@@ -23,14 +23,15 @@ Develop a modern data warehouse using SQL Server to consolidate sales data, enab
 - **Documentation**: Provide clear documentation of the data model to support both business stakeholders and analytics teams.
 
 ---
+
+## Data Architecture
+The data architecture for this project follows Medallion Architecture** Bronze, Silver & Gold** layers
 <img width="1182" height="742" alt="image" src="https://github.com/user-attachments/assets/46383188-3518-45d7-bd46-69d4032d329f" />
 
-
-Data Architecture
-The data architecture for this project follows Medallion Architecture: Bronze, Silver & Gold
-
-
-
+1. **Bronze Layer**: Stores raw data as-is from the source system. Data is ingested from CSV Files into SQL Server
+2. **Silver Layer**: This layer includes data cleansing, standardization, and normalization process to prepare data for analaysis.
+3. ** Gold Layer**:   Houses business-ready data model into a star schema required for reporting and analysis 
+---
 
 ### BI: Analytics & Reporting (Data Analytics)
 
