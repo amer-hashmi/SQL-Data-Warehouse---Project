@@ -6,9 +6,9 @@ The Gold Layer is the business-level data representation, structured to support 
 
 ---
 
-gold.dim_customers
+**1.gold.dim_customers**
 
-Purpose
+**Purpose**
 
 Stores customer details enriched with demographic and geographic information. This dimension table provides descriptive attributes that can be used to analyze sales and customer-related business metrics.
 
