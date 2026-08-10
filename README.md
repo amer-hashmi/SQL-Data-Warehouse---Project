@@ -23,6 +23,14 @@ Develop a modern data warehouse using SQL Server to consolidate sales data, enab
 - **Documentation**: Provide clear documentation of the data model to support both business stakeholders and analytics teams.
 
 ---
+<img width="1182" height="742" alt="image" src="https://github.com/user-attachments/assets/46383188-3518-45d7-bd46-69d4032d329f" />
+
+
+Data Architecture
+The data architecture for this project follows Medallion Architecture: Bronze, Silver & Gold
+
+
+
 
 ### BI: Analytics & Reporting (Data Analytics)
 
